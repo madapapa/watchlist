@@ -12,5 +12,5 @@ def user_name(name):
 
 @app.route('/test')
 def test_url_for():
-    print(url_for('user_name', name='lizheng'))
-    return 'Test page'
+    print(url_for('user_name', name='request'))
+    return 'Test git pull request page'
