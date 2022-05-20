@@ -31,6 +31,12 @@ footer{
 
 .dufu{
     display: block;
-    margin: o auto;
+    margin: 0 auto;
     height: 100px;
+}
+
+.calgary{
+    display: block;
+    margin: 0 auto;
+    height: 200px;
 }

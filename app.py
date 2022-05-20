@@ -1,13 +1,47 @@
+import os
+from pydoc import cli
+import sys
+from turtle import title
+import click
 from flask import Flask, escape, url_for, render_template
+from flask_sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////' + os.path.join(app.root_path, 'data.db') 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#load configuration before instance of SQLACHEMY
+db = SQLAlchemy(app)
+
+class User(db.Model): #table name will be user
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+
+class Movie(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(60))
+    year = db.Column(db.String(4))
+
+
+
+
 @app.route('/')
 def index():
-    return render_template('index.html', name=name, movies=movies)
+    user = User.query.get(6)
+    movies = Movie.query.all()
+    # return render_template('index.html', name=name, movies=movies)
+    return render_template('index.html', user=user, movies=movies)
+    
 
 
-name = 'madapapa'
+@app.cli.command()
+def forge():
+    """Generate fake data. """
+    db.create_all()
+
+
+# name = 'madapapa'
 movies = [
     {'title': 'My Neighbor Totoro', 'year': '1988'},
     {'title': 'Dead Poets Society', 'year': '1989'},
@@ -20,3 +54,9 @@ movies = [
     {'title': 'WALL-E', 'year': '2008'},
     {'title': 'The Pork of Music', 'year': '2012'},
 ]
+for m in movies:
+    movie = Movie(title=m['title'], year=m['year'])
+    db.session.add(movie)
+
+db.session.commit()
+click.echo('Done.')

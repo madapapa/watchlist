@@ -8,8 +8,8 @@
 </head>
 <body>
     <h2> 
-        <img alt="Avatar" class="avatar"  src="  {{url_for('static', filename='images/dufu.jpg')}}  " >
-        {{name}}'s Watchlist 
+        <img alt="Avartar" class="avatar"  src="  {{url_for('static', filename='images/dufu.jpg')}}  " >
+        {{user.name}}'s Watchlist 
 
     </h2>
     <!-- 使用length过滤器获取movie变量的长度 -->
@@ -20,7 +20,7 @@
         {% endfor %}
     </ul>
     <footer>
-        <img src=" {{ url_for('static', filename='images/calgary.png') }} " class="dufu" alt="Calgary Bridge">
+        <img src=" {{ url_for('static', filename='images/calgary.png') }} " class="calgary" alt="Calgary Bridge">
         <small>&copy; 2022 madapapa.com </small>
         
     </footer>
