@@ -24,15 +24,24 @@ class Movie(db.Model):
     year = db.Column(db.String(4))
 
 
+    
+@app.context_processor
+def inject_user():
+    user = User.query.first()
+    return dict(user=user)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # user = User.query.first()
+    return render_template('404.html') 
 
 
 @app.route('/')
 def index():
-    user = User.query.get(6)
+    # user = User.query.get(6)
     movies = Movie.query.all()
-    # return render_template('index.html', name=name, movies=movies)
-    return render_template('index.html', user=user, movies=movies)
-    
+    # return render_template('index.html', user=user, movies=movies)
+    return render_template('index.html', movies=movies)
 
 
 @app.cli.command()
@@ -41,22 +50,24 @@ def forge():
     db.create_all()
 
 
-# name = 'madapapa'
-movies = [
-    {'title': 'My Neighbor Totoro', 'year': '1988'},
-    {'title': 'Dead Poets Society', 'year': '1989'},
-    {'title': 'A Perfect World', 'year': '1993'},
-    {'title': 'Leon', 'year': '1994'},
-    {'title': 'Mahjong', 'year': '1996'},
-    {'title': 'Swallowtail Butterfly', 'year': '1996'},
-    {'title': 'King of Comedy', 'year': '1999'},
-    {'title': 'Devils on the Doorstep', 'year': '1999'},
-    {'title': 'WALL-E', 'year': '2008'},
-    {'title': 'The Pork of Music', 'year': '2012'},
-]
-for m in movies:
-    movie = Movie(title=m['title'], year=m['year'])
-    db.session.add(movie)
+    # name = 'madapapa'
+    movies = [
+        {'title': 'My Neighbor Totoro', 'year': '1988'},
+        {'title': 'Dead Poets Society', 'year': '1989'},
+        {'title': 'A Perfect World', 'year': '1993'},
+        {'title': 'Leon', 'year': '1994'},
+        {'title': 'Mahjong', 'year': '1996'},
+        {'title': 'Swallowtail Butterfly', 'year': '1996'},
+        {'title': 'King of Comedy', 'year': '1999'},
+        {'title': 'Devils on the Doorstep', 'year': '1999'},
+        {'title': 'WALL-E', 'year': '2008'},
+        {'title': 'The Pork of Music', 'year': '2012'},
+    ]
+    for m in movies:
+        movie = Movie(title=m['title'], year=m['year'])
+        db.session.add(movie)
 
-db.session.commit()
-click.echo('Done.')
+    db.session.commit()
+    click.echo('Done.')
+
+
