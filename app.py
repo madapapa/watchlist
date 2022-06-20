@@ -39,6 +39,7 @@ def page_not_found(e):
 @app.route('/')
 def index():
     # user = User.query.get(6)
+    user = User.query.first()
     movies = Movie.query.all()
     # return render_template('index.html', user=user, movies=movies)
     return render_template('index.html', movies=movies)
@@ -50,7 +51,7 @@ def forge():
     db.create_all()
 
 
-    # name = 'madapapa'
+    name = 'madapapa'
     movies = [
         {'title': 'My Neighbor Totoro', 'year': '1988'},
         {'title': 'Dead Poets Society', 'year': '1989'},
@@ -63,6 +64,9 @@ def forge():
         {'title': 'WALL-E', 'year': '2008'},
         {'title': 'The Pork of Music', 'year': '2012'},
     ]
+    user = User(name=name)
+    db.session.add(user)
+
     for m in movies:
         movie = Movie(title=m['title'], year=m['year'])
         db.session.add(movie)
