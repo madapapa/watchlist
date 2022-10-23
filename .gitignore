@@ -1,5 +1,10 @@
 *.pyc
 *~
 __pycache__
+<<<<<<< HEAD
 .DS_Store
 
+=======
+.DS_Stor
+*.db
+>>>>>>> c2f543cbf11306e7b8e367190e8b8cf8bc3ed049
