@@ -4,6 +4,7 @@ import sys
 from turtle import title
 import click
 from flask import Flask, escape, url_for, render_template
+from flask import request, url_for, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -11,6 +12,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////' + os.path.join(app.root_path, 'data.db') 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'dev'
 #load configuration before instance of SQLACHEMY
 db = SQLAlchemy(app)
 
@@ -36,8 +38,23 @@ def page_not_found(e):
     return render_template('404.html') 
 
 
-@app.route('/')
+@app.route('/', methods= ['GET','POST'])
 def index():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        year = request.form.get('year')
+        if not title or not year or len(year) > 4 or len(title) > 60:
+            flash('Invalid input.')
+            return redirect(url_for('index'))
+        movie = Movie(title = title, year = year)
+        db.session.add(movie)
+        db.session.commit()
+        flash('Item created.')
+        return redirect(url_for('index'))
+
+    movies = Movie.query.all()
+    return render_template('index.html', movies=movies)
+
     # user = User.query.get(6)
     user = User.query.first()
     movies = Movie.query.all()
